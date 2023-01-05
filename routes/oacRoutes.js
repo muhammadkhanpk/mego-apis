@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-router.post("/oac-success/", (req, res) => {
+router.post("/oac-success/:trandata", (req, res) => {
   return res.json({
     query: req.query,
     params: req.params,
