@@ -6,17 +6,14 @@ const s3 = new AWS.S3({
   secretAccessKey: process.env.secretAccessKeyID,
 });
 
-const uploadFile = (filePath, url) => {
+const uploadFile = (filePath, key) => {
   return new Promise((resolve, reject) => {
     try {
-      var fs = require("fs");
-      const file = fs.readFileSync(filePath);
       const BUCKET = "mego-services";
-
       const uploadParams = {
         Bucket: BUCKET,
-        Key: url,
-        Body: file,
+        Key: key,
+        Body: filePath,
       };
 
       s3.upload(uploadParams, function (err, data) {
