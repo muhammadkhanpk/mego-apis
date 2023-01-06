@@ -8,7 +8,7 @@ const loginAdmin = async (req, res) => {
     return res.status(400).send("Email and password is required");
   }
   const admin = await Admins.findOne({ email });
-  return res.json(admin);
+  // return res.json(admin);
   if (admin) {
     const token = jwt.sign(admin.email, process.env.TOKEN_SECRET);
     let info = JSON.parse(JSON.stringify(admin));
