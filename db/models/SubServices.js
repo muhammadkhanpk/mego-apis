@@ -9,6 +9,7 @@ const subServicesSchema = new mongoose.Schema(
     name: String,
     price: Number,
     img: String,
+    description: String,
   },
   {
     _id: false,
@@ -22,6 +23,7 @@ const subServicesValidation = (service) => {
     _id: Joi.string().required(),
     name: Joi.string().required(),
     price: Joi.number().required(),
+    description: Joi.string().required(),
   });
   return validationSchema.validate(service);
 };

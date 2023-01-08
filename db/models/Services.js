@@ -10,11 +10,13 @@ const servicesSchema = new mongoose.Schema(
     name: String,
     price: Number,
     img: String,
+    description: String,
     subServices: [{ type: String, ref: "SubServices" }],
   },
   {
     _id: false,
     versionKey: false,
+    strict: false,
     collection: "services",
   }
 );
@@ -24,6 +26,7 @@ const servicesValidation = (service) => {
     _id: Joi.string().required(),
     name: Joi.string().required(),
     price: Joi.number().required(),
+    description: Joi.string().required(),
   });
   return validationSchema.validate(service);
 };

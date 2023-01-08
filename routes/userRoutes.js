@@ -5,6 +5,7 @@ const router = express.Router();
 
 router.post("/saveUserOTP", userController.saveUserOTP);
 router.post("/verifyOTP", userController.verifyOTP);
+router.get("/findUser/:userId", jwt.verifyToken, userController.findUser);
 router.get("/allUsers", jwt.verifyToken, userController.allUsers);
 
 module.exports = router;

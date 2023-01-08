@@ -7,9 +7,6 @@ const { uploadImage } = require("../services/gcsUpload");
 const { v4: uuid } = require("uuid");
 
 const saveService = async (req, res) => {
-  if (!req.files) {
-    return res.status(400).send("Select Service Image.");
-  }
   const id = uuid();
   let obj = { _id: id, ...req.body };
   const { error } = servicesValidation(obj);
@@ -32,16 +29,11 @@ const saveService = async (req, res) => {
 const updateService = async (req, res) => {};
 const deleteService = async (req, res) => {};
 const allServices = async (req, res) => {
-  const s = await Services.findOne({ _id: req.params.id }).populate(
-    "subServices"
-  );
+  const s = await Services.find();
   return res.json(s);
 };
 //sub services
 const saveSubService = async (req, res) => {
-  if (!req.files) {
-    return res.status(400).send("Select Sub Service Image.");
-  }
   const id = uuid();
   let obj = { _id: id, ...req.body };
   // return res.json(obj);
@@ -62,6 +54,7 @@ const saveSubService = async (req, res) => {
     Services.updateOne(
       { _id: req.params.serviceId },
       { $push: { subServices: id } },
+      { new: true },
       async (err, ser) => {
         if (err) {
           return res.status(400).send("Card id is required !");
@@ -73,6 +66,17 @@ const saveSubService = async (req, res) => {
 };
 const updateSubService = async (req, res) => {};
 const deleteSubService = async (req, res) => {};
+const allSubServices = async (req, res) => {
+  const { serviceId } = req.params;
+  if (serviceId) {
+    const s = await Services.findOne({ _id: serviceId }).populate(
+      "subServices"
+    );
+    return res.json(s);
+  } else {
+    return res.status(400).send("Service Id is required");
+  }
+};
 
 module.exports = {
   saveService,
@@ -82,4 +86,5 @@ module.exports = {
   saveSubService,
   updateSubService,
   deleteSubService,
+  allSubServices,
 };

@@ -61,8 +61,17 @@ const verifyOTP = async (req, res) => {
     return res.status(400).send("Provide phone number with otp");
   }
 };
+const findUser = async (req, res) => {
+  const { userId } = req.params;
+  if (userId) {
+    const user = await Users.findOne({ _id: userId });
+    return res.json(user);
+  } else {
+    return res.status(400).send("Provide UserId");
+  }
+};
 const allUsers = async (req, res) => {
   const users = await Users.find();
   return res.json(users);
 };
-module.exports = { saveUserOTP, allUsers, verifyOTP };
+module.exports = { saveUserOTP, allUsers, verifyOTP, findUser };

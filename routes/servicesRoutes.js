@@ -10,12 +10,13 @@ const {
   saveSubService,
   updateSubService,
   deleteSubService,
+  allSubServices,
 } = require("../controllers/servicesController");
 
 router.post("/saveService", jwt.verifyToken, multerStorage, saveService);
 router.post("/updateService", jwt.verifyToken, updateService);
 router.post("/deleteService", jwt.verifyToken, deleteService);
-router.get("/allServices/:id", jwt.verifyToken, allServices);
+router.get("/allServices", jwt.verifyToken, allServices);
 router.post(
   "/saveSubService/:serviceId",
   jwt.verifyToken,
@@ -24,5 +25,6 @@ router.post(
 );
 router.post("/updateSubService", jwt.verifyToken, updateSubService);
 router.post("/deleteSubService", jwt.verifyToken, deleteSubService);
+router.get("/allSubServices/:serviceId", jwt.verifyToken, allSubServices);
 
 module.exports = router;
