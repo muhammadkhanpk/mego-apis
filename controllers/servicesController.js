@@ -18,7 +18,7 @@ const saveService = async (req, res) => {
     return res.status(400).send("Service is already exists.");
   }
   const img = await uploadImage(req.files, `services/${id}`);
-  const newService = new Services({ ...obj, img });
+  const newService = new Services({ ...obj, ...img });
   newService.save((err, service) => {
     if (err) {
       return res.status(400).send("New Service is not created.");
@@ -46,7 +46,7 @@ const saveSubService = async (req, res) => {
     return res.status(400).send("Sub Service is already exists.");
   }
   const img = await uploadImage(req.files, `subServices/${id}`);
-  const newSubService = new SubServices({ ...obj, img });
+  const newSubService = new SubServices({ ...obj, ...img });
   newSubService.save((err, subService) => {
     if (err) {
       return res.status(400).send("New Sub Service is not created.");

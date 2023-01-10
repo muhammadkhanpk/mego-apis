@@ -9,7 +9,6 @@ const servicesSchema = new mongoose.Schema(
     },
     name: String,
     price: Number,
-    img: String,
     description: String,
     subServices: [{ type: String, ref: "SubServices" }],
   },

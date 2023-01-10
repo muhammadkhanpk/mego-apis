@@ -8,12 +8,12 @@ const subServicesSchema = new mongoose.Schema(
     },
     name: String,
     price: Number,
-    img: String,
     description: String,
   },
   {
     _id: false,
     versionKey: false,
+    strict: false,
     collection: "subServices",
   }
 );
