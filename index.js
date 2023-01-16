@@ -5,6 +5,7 @@ const cors = require("cors");
 const userRoutes = require("./routes/userRoutes");
 const servicesRoutes = require("./routes/servicesRoutes");
 const adminRoutes = require("./routes/adminRoutes");
+const sliderRoutes = require("./routes/sliderRoutes");
 //DB
 const DbConnection = require("./db/DbConnection");
 DbConnection();
@@ -16,6 +17,7 @@ app.use(express.json());
 app.use("/api/users", userRoutes);
 app.use("/api/services", servicesRoutes);
 app.use("/api/admins", adminRoutes);
+app.use("/api/sliders", sliderRoutes);
 
 app.get("/", (req, res) => {
   return res.json({
