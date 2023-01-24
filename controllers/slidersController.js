@@ -3,8 +3,7 @@ const { uploadImage } = require("../services/gcsUpload");
 const { v4: uuid } = require("uuid");
 
 const saveSlider = async (req, res) => {
-  return res.json({ body: req.body, files: req.files });
-
+  //   return res.json({ msg: "hello sliders" });
   const id = uuid();
   let obj = { _id: id, ...req.body };
   const oldSlider = await Sliders.findOne({ sliderUrl: obj.sliderUrl });
