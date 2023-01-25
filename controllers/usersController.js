@@ -5,9 +5,9 @@ const { Users } = require("../db/models/Users");
 // const { v4: uuid } = require("uuid");
 const { generateOTP } = require("../services/Utils");
 const saveUserOTP = async (req, res) => {
-  const { phoneNo } = req.body;
-  if (phoneNo) {
-    const oldUser = await Users.findOne({ phoneNo });
+  const { phoneNo, userType } = req.body;
+  if (phoneNo && userType) {
+    const oldUser = await Users.findOne({ phoneNo, userType });
     if (oldUser) {
       const otp = generateOTP();
       Users.findOneAndUpdate(
@@ -23,11 +23,20 @@ const saveUserOTP = async (req, res) => {
         }
       );
     } else {
+      const oldUser = await Users.findOne({ phoneNo });
+      if (oldUser) {
+        let reason = userType == "provider" ? "User" : "Provider";
+        return res
+          .status(400)
+          .send(
+            `This phone is already registered with [${reason}] credentials`
+          );
+      }
       let code = phoneNo.substring(0, 3);
       if (code == "+92") {
         // const otp = generateOTP();
         const otp = 1234;
-        let obj = { phoneNo, otp };
+        let obj = { phoneNo, otp, userType };
         var user = new Users(obj);
         user.save((err, u) => {
           if (err) {
@@ -42,7 +51,7 @@ const saveUserOTP = async (req, res) => {
       }
     }
   } else {
-    return res.status(400).send("Provide Phone NO");
+    return res.status(400).send("Provide User & Phone NO");
   }
 };
 const verifyOTP = async (req, res) => {
@@ -70,6 +79,7 @@ const findUser = async (req, res) => {
     return res.status(400).send("Provide UserId");
   }
 };
+
 const allUsers = async (req, res) => {
   const users = await Users.find();
   return res.json(users);
