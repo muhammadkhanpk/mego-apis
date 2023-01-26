@@ -1,7 +1,7 @@
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
 const { Users } = require("../db/models/Users");
-
+const { uploadImage } = require("../services/gcsUpload");
 // const { v4: uuid } = require("uuid");
 const { generateOTP } = require("../services/Utils");
 const saveUserOTP = async (req, res) => {
@@ -61,7 +61,7 @@ const verifyOTP = async (req, res) => {
     const u = await Users.findOne({ phoneNo, otp: newOtp });
     const user = JSON.parse(JSON.stringify(u));
     if (user) {
-      let token = jwt.sign({ ...user }, process.env.TOKEN_SECRET);
+      let token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET);
       return res.json({ ...user, token });
     } else {
       return res.status(400).send("You are providing wrong credentials.");
@@ -79,9 +79,57 @@ const findUser = async (req, res) => {
     return res.status(400).send("Provide UserId");
   }
 };
+const updateProvider = async (req, res) => {
+  const { providerId } = req.params;
+  // return res.json(providerId);
 
+  if (providerId) {
+    try {
+      const provider = await Users.findOne({ _id: providerId });
+      let pr = JSON.parse(JSON.stringify(provider));
+      // return res.json(pr);
+      if (!!pr && pr.userType == "provider") {
+        let newImgs = {};
+        if (req.files.length > 0) {
+          const imgs = await uploadImage(
+            req.files,
+            `providers/${providerId}/profile`
+          );
+          newImgs = { ...imgs };
+        }
+        let updatePr = {
+          ...pr,
+          ...req.body,
+          imgs: {
+            ...pr.imgs,
+            ...newImgs,
+          },
+        };
+        // return res.json(x);
+        Users.findOneAndUpdate(
+          providerId,
+          { ...updatePr },
+          { new: true },
+          (err, p) => {
+            if (err) {
+              return res.status(400).send("Provider is not updated!");
+            } else {
+              res.json(p);
+            }
+          }
+        );
+      } else {
+        return res.status(400).send("Provider not found on this ID");
+      }
+    } catch (e) {
+      return res.status(400).send("Provider not found on this ID");
+    }
+  } else {
+    return res.status(400).send("Provide providerId");
+  }
+};
 const allUsers = async (req, res) => {
   const users = await Users.find();
   return res.json(users);
 };
-module.exports = { saveUserOTP, allUsers, verifyOTP, findUser };
+module.exports = { saveUserOTP, allUsers, verifyOTP, findUser, updateProvider };
