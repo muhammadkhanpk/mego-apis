@@ -6,6 +6,7 @@ const userRoutes = require("./routes/userRoutes");
 const servicesRoutes = require("./routes/servicesRoutes");
 const adminRoutes = require("./routes/adminRoutes");
 const sliderRoutes = require("./routes/sliderRoutes");
+const notificationRoutes = require("./routes/notificationRoutes");
 //DB
 const DbConnection = require("./db/DbConnection");
 DbConnection();
@@ -18,6 +19,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/services", servicesRoutes);
 app.use("/api/admins", adminRoutes);
 app.use("/api/sliders", sliderRoutes);
+app.use("/api/notification", notificationRoutes);
 
 app.get("/", (req, res) => {
   return res.json({
