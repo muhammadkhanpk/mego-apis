@@ -16,9 +16,21 @@ const saveUserOTP = async (req, res) => {
         { new: true },
         (err, user) => {
           if (err) {
-            return res.status(400).send("OTP is not updated!");
+            return res.json({
+              status: false,
+              success: {},
+              error: {
+                message: `OTP is not updated`,
+              },
+            });
           } else {
-            res.json({ phoneNo: user.phoneNo, status: true });
+            return res.json({
+              status: true,
+              success: { phoneNo: user.phoneNo },
+              error: {
+                message: ``,
+              },
+            });
           }
         }
       );
@@ -26,11 +38,13 @@ const saveUserOTP = async (req, res) => {
       const oldUser = await Users.findOne({ phoneNo });
       if (oldUser) {
         let reason = userType == "provider" ? "User" : "Provider";
-        return res
-          .status(400)
-          .send(
-            `This phone is already registered with [${reason}] credentials`
-          );
+        return res.json({
+          status: false,
+          success: {},
+          error: {
+            message: `This phone is already registered with [${reason}] credentials`,
+          },
+        });
       }
       let code = phoneNo.substring(0, 3);
       if (code == "+92") {
@@ -40,18 +54,42 @@ const saveUserOTP = async (req, res) => {
         var user = new Users(obj);
         user.save((err, u) => {
           if (err) {
-            return res.json(err);
+            return res.json({
+              status: false,
+              success: {},
+              error: {
+                message: `OTP is not saved`,
+              },
+            });
           } else {
-            return res.json(u);
+            return res.json({
+              status: true,
+              success: { ...JSON.parse(JSON.stringify(u)) },
+              error: {
+                message: ``,
+              },
+            });
           }
         });
       } else if (code == "+97") {
       } else {
-        return res.status(400).send("Wrong Country Code");
+        return res.json({
+          status: false,
+          success: {},
+          error: {
+            message: "Wrong Country Code",
+          },
+        });
       }
     }
   } else {
-    return res.status(400).send("Provide User & Phone NO");
+    return res.json({
+      status: false,
+      success: {},
+      error: {
+        message: "Provide Phone Number and User Type",
+      },
+    });
   }
 };
 const verifyOTP = async (req, res) => {
