@@ -37,7 +37,7 @@ const saveUserOTP = async (req, res) => {
     } else {
       const oldUser = await Users.findOne({ phoneNo });
       if (oldUser) {
-        let reason = userType == "provider" ? "User" : "Provider";
+        let reason = userType == "provider" ? "Customer" : "Provider";
         return res.json({
           status: false,
           success: {},

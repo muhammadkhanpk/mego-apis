@@ -1,4 +1,4 @@
-const { storagey } = require("./firebaseService");
+const { storage } = require("./firebaseService");
 //upload file
 const uploadImage = async (files, keyUrl) => {
   return new Promise(async (resolve, reject) => {
