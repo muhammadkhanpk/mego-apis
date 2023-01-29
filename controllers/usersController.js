@@ -48,9 +48,8 @@ const saveUserOTP = async (req, res) => {
       }
       let code = phoneNo.substring(0, 3);
       if (code == "+92") {
-        // const otp = generateOTP();
-        const otp = 1234;
-        let obj = { phoneNo, otp, userType };
+        const otp = generateOTP();
+        let obj = { phoneNo, otp, userType, country: "PAKISTAN" };
         var user = new Users(obj);
         user.save((err, u) => {
           if (err) {
@@ -72,6 +71,28 @@ const saveUserOTP = async (req, res) => {
           }
         });
       } else if (code == "+97") {
+        const otp = generateOTP();
+        let obj = { phoneNo, otp, userType, country: "UAE" };
+        var user = new Users(obj);
+        user.save((err, u) => {
+          if (err) {
+            return res.json({
+              status: false,
+              success: {},
+              error: {
+                message: `OTP is not saved`,
+              },
+            });
+          } else {
+            return res.json({
+              status: true,
+              success: { ...JSON.parse(JSON.stringify(u)) },
+              error: {
+                message: ``,
+              },
+            });
+          }
+        });
       } else {
         return res.json({
           status: false,
