@@ -158,19 +158,30 @@ const updateProvider = async (req, res) => {
         }
         let updatePr = {
           ...pr,
-          ...req.body,
+          ...req?.body,
           imgs: {
-            ...pr.imgs,
+            ...pr?.imgs,
             ...newImgs,
           },
         };
-        // return res.json(x);
+        // return res.json(updatePr);
+        try {
+          const x = await Users.updateOne(
+            { _id: providerId },
+            { $set: { ...updatePr } }
+          );
+          const xx = await Users.find({ _id: providerId });
+          return res.json(xx);
+        } catch (e) {
+          return res.status(400).send("Provider is not updated!");
+        }
         Users.findOneAndUpdate(
           providerId,
           { ...updatePr },
           { new: true },
           (err, p) => {
             if (err) {
+              // return res.json(err);
               return res.status(400).send("Provider is not updated!");
             } else {
               res.json(p);

@@ -4,13 +4,31 @@ const sendPushNotification = async (req, res) => {
   const { country, sendTo, title, description } = req.body;
   try {
     if (country.length == 2) {
+      if (sendTo.length == 2) {
+        const users = await Users.find({}).map((token) => token.fcmToken);
+        return res.json(users);
+      } else {
+        const users = await Users.find({ userType: sendTo[0] });
+        return res.json(users);
+      }
     } else {
-      if (country[0] == "Pakistan") {
-      } else if (country[0] == "UAE") {
+      if (sendTo.length == 2) {
+        const users = await Users.find({ country: country[0] });
+        return res.json(users);
+      } else {
+        const users = await Users.find({
+          country: country[0],
+          userType: sendTo[0],
+        });
+        return res.json(users);
       }
     }
-  } catch (e) {}
-  return res.json(req.body);
+  } catch (e) {
+    return res.json({
+      status: false,
+    });
+  }
+  // return res.json(req.body);
   if (tokens && title && description) {
     try {
       const message = await admin.messaging().sendToDevice(
@@ -34,20 +52,6 @@ const sendPushNotification = async (req, res) => {
     return res.status(400).send("Notification is not send");
   }
 };
-const sendPushNotificationToUser = async (req, res) => {
-  const { userId, title, description } = req.body;
-  if (!userId || !title || !description) {
-    return res.json({
-      status: false,
-      success: {},
-      error: {
-        message: "Some of the parameters are missings",
-      },
-    });
-  }
-  const user = Users.find({ _id: userId });
-  return res.json(user);
-};
 const sendNotification = ({ title, description, tokens }) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -70,4 +74,4 @@ const sendNotification = ({ title, description, tokens }) => {
     }
   });
 };
-module.exports = { sendPushNotification, sendPushNotificationToUser };
+module.exports = { sendPushNotification };
