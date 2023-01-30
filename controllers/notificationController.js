@@ -5,27 +5,35 @@ const sendPushNotification = async (req, res) => {
   try {
     if (country.length == 2) {
       if (sendTo.length == 2) {
-        const users = await Users.find({}).map((token) => token.fcmToken);
-        return res.json(users);
+        const tokens = await (
+          await Users.find({ isFCM: true }, { fcmToken: 1 })
+        ).map((val) => val.fcmToken);
+        const xxx = await sendNotification({ title, description, tokens });
+        return res.json(xxx);
       } else {
-        const users = await Users.find({ userType: sendTo[0] });
+        const users = await Users.find(
+          { userType: sendTo[0], isFCM: true },
+          { fcmToken: 1 }
+        ).map((val) => val.fcmToken);
+        const xxx = await sendNotification({ title, description, tokens });
         return res.json(users);
       }
     } else {
       if (sendTo.length == 2) {
-        const users = await Users.find({ country: country[0] });
+        const users = await Users.find({ country: country[0], isFCM: true });
         return res.json(users);
       } else {
         const users = await Users.find({
           country: country[0],
           userType: sendTo[0],
+          isFCM: true,
         });
         return res.json(users);
       }
     }
   } catch (e) {
     return res.json({
-      status: false,
+      status: e,
     });
   }
   // return res.json(req.body);
@@ -70,7 +78,7 @@ const sendNotification = ({ title, description, tokens }) => {
       );
       resolve(true);
     } catch (e) {
-      reject(false);
+      reject(e);
     }
   });
 };
