@@ -7,7 +7,8 @@ const subServicesSchema = new mongoose.Schema(
       unique: true,
     },
     name: String,
-    price: Number,
+    pkPrice: Number,
+    uaePrice: Number,
     description: String,
   },
   {
@@ -22,7 +23,8 @@ const subServicesValidation = (service) => {
   const validationSchema = Joi.object({
     _id: Joi.string().required(),
     name: Joi.string().required(),
-    price: Joi.number().required(),
+    pkPrice: Joi.number().required(),
+    uaePrice: Joi.number().required(),
     description: Joi.string().required(),
   });
   return validationSchema.validate(service);
