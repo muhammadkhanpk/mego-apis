@@ -72,7 +72,7 @@ const allSubServices = async (req, res) => {
     const s = await Services.findOne({ _id: serviceId }).populate(
       "subServices"
     );
-    return res.json(s);
+    return res.json(s.subServices);
   } else {
     return res.status(400).send("Service Id is required");
   }
