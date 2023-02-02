@@ -170,7 +170,7 @@ const updateProvider = async (req, res) => {
             { _id: providerId },
             { $set: { ...updatePr } }
           );
-          const updatedUser = await Users.find({ _id: providerId });
+          const updatedUser = await Users.findOne({ _id: providerId });
           return res.json(updatedUser);
         } catch (e) {
           return res.status(400).send("Provider is not updated!");

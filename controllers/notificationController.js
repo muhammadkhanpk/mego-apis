@@ -1,22 +1,23 @@
 const { Users } = require("../db/models/Users");
 const { admin } = require("../services/firebaseService");
 const sendPushNotification = async (req, res) => {
+  return res.json(req.body);
   const { country, sendTo, title, description } = req.body;
   try {
     if (country.length == 2) {
       if (sendTo.length == 2) {
-        const tokens = await (
-          await Users.find({ isFCM: true }, { fcmToken: 1 })
-        ).map((val) => val.fcmToken);
-        const xxx = await sendNotification({ title, description, tokens });
-        return res.json(xxx);
+        const tokens = await Users.find({ isFCM: true }, { fcmToken: 1 }).map(
+          (val) => val.fcmToken
+        );
+        const noti = await sendNotification({ title, description, tokens });
+        return res.json(noti);
       } else {
         const users = await Users.find(
           { userType: sendTo[0], isFCM: true },
           { fcmToken: 1 }
         ).map((val) => val.fcmToken);
-        const xxx = await sendNotification({ title, description, tokens });
-        return res.json(users);
+        const noti = await sendNotification({ title, description, tokens });
+        return res.json(noti);
       }
     } else {
       if (sendTo.length == 2) {
