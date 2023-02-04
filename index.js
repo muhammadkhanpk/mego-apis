@@ -9,10 +9,16 @@ const sliderRoutes = require("./routes/sliderRoutes");
 const notificationRoutes = require("./routes/notificationRoutes");
 //DB
 const DbConnection = require("./db/DbConnection");
+
 DbConnection();
 
 const app = express();
-app.use(cors());
+app.use(
+  cors({
+    origin: true,
+    credentials: true,
+  })
+);
 app.use(express.json());
 
 app.use("/api/users", userRoutes);
@@ -21,7 +27,7 @@ app.use("/api/admins", adminRoutes);
 app.use("/api/sliders", sliderRoutes);
 app.use("/api/notification", notificationRoutes);
 
-app.get("/", (req, res) => {
+app.get("/", async (req, res) => {
   return res.json({
     msg: "Greetings from MeGo",
   });
