@@ -61,9 +61,10 @@ const saveUserOTP = async (req, res) => {
               },
             });
           } else {
+            let { otp, ...ux } = JSON.parse(JSON.stringify(u));
             return res.json({
               status: true,
-              success: { ...JSON.parse(JSON.stringify(u)) },
+              success: { ...ux },
               error: {
                 message: ``,
               },
@@ -84,9 +85,10 @@ const saveUserOTP = async (req, res) => {
               },
             });
           } else {
+            let { otp, ...ux } = JSON.parse(JSON.stringify(u));
             return res.json({
               status: true,
-              success: { ...JSON.parse(JSON.stringify(u)) },
+              success: { ...ux },
               error: {
                 message: ``,
               },
