@@ -23,8 +23,8 @@ const uploadImage = async (files, keyUrl) => {
           } catch (e) {
             reject(e);
           }
+          if (urls.length == files.length) resolve(urlsObj);
         });
-        if (urls.length == files.length) resolve(urlsObj);
       } catch (e) {
         reject(e);
       }
