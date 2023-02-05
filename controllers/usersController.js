@@ -156,7 +156,7 @@ const updateProvider = async (req, res) => {
             req.files,
             `providers/${providerId}/profile`
           );
-          return res.json(imgs);
+          // return res.json(imgs);
           newImgs = { ...imgs };
         }
         let updatePr = {

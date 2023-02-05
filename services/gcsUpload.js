@@ -3,7 +3,6 @@ const { storage } = require("./firebaseService");
 const uploadImage = async (files, keyUrl) => {
   return new Promise(async (resolve, reject) => {
     if (files.length > 0) {
-      let urls = [];
       let urlsObj = {};
       Promise.all(
         files.map(async (element) => {
