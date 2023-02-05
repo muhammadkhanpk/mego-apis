@@ -148,7 +148,7 @@ const updateProvider = async (req, res) => {
     try {
       const provider = await Users.findOne({ _id: providerId });
       let pr = JSON.parse(JSON.stringify(provider));
-      // return res.json(pr);
+      //return res.json(pr);
       if (!!pr && pr.userType == "provider") {
         let newImgs = {};
         if (req.files.length > 0) {
@@ -156,7 +156,7 @@ const updateProvider = async (req, res) => {
             req.files,
             `providers/${providerId}/profile`
           );
-          // return res.json(imgs);
+          return res.json(imgs);
           newImgs = { ...imgs };
         }
         let updatePr = {

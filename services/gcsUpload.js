@@ -5,8 +5,8 @@ const uploadImage = async (files, keyUrl) => {
     if (files.length > 0) {
       let urls = [];
       let urlsObj = {};
-      try {
-        files.forEach(async (element) => {
+      Promise.all(
+        files.map(async (element) => {
           let img = element;
           let originalFile = img?.originalname;
           let fieldname = img?.fieldname;
@@ -19,15 +19,13 @@ const uploadImage = async (files, keyUrl) => {
             });
             await file.makePublic();
             urlsObj = { ...urlsObj, [fieldname]: file.publicUrl() };
-            urls.push(file.publicUrl());
           } catch (e) {
             reject(e);
           }
-        });
-        if (urls.length == files.length) resolve(urlsObj);
-      } catch (e) {
-        reject(e);
-      }
+        })
+      )
+        .then((result) => resolve(urlsObj))
+        .catch((e) => reject(e));
     }
   });
 };
