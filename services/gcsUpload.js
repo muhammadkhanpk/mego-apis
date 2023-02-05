@@ -14,7 +14,7 @@ const uploadImage = async (files, keyUrl) => {
           const file = storage.file(`${keyUrl}/${fieldname}.${ext}`);
           try {
             await file.save(img.buffer, {
-              contentType: img.mimetype,
+              contentType: "image/jpeg",
             });
             await file.makePublic();
             urlsObj = { ...urlsObj, [fieldname]: file.publicUrl() };
