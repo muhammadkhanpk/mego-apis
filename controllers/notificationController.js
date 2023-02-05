@@ -5,35 +5,51 @@ const sendPushNotification = async (req, res) => {
   try {
     if (country.length == 2) {
       if (sendTo.length == 2) {
-        const tokens = await Users.find(
-          { isFCM: true, fcmToken: { $ne: null, $ne: "", $ne: undefined } },
+        const tokensObj = await Users.find(
+          { isFCM: "true", fcmToken: { $ne: null, $ne: "", $ne: undefined } },
           { fcmToken: 1 }
-        ).map((val) => val.fcmToken);
+        );
 
+        let tokens = tokensObj.map((val) => val.fcmToken);
         const noti = await sendNotification({ title, description, tokens });
-        return res.json("To all");
+        return res.json("To All");
       } else {
-        const tokens = await Users.find(
-          { userType: sendTo[0], isFCM: true },
+        const tokensObj = await Users.find(
+          {
+            userType: sendTo[0],
+            isFCM: "true",
+            fcmToken: { $ne: null, $ne: "", $ne: undefined },
+          },
           { fcmToken: 1 }
-        ).map((val) => val.fcmToken);
+        );
+        let tokens = tokensObj.map((val) => val.fcmToken);
         const noti = await sendNotification({ title, description, tokens });
         return res.json("To all country and To specific User Type");
       }
     } else {
       if (sendTo.length == 2) {
-        const tokens = await Users.find({
-          country: country[0],
-          isFCM: true,
-        }).map((val) => val.fcmToken);
+        const tokensObj = await Users.find(
+          {
+            country: country[0],
+            isFCM: "true",
+            fcmToken: { $ne: null, $ne: "", $ne: undefined },
+          },
+          { fcmToken: 1 }
+        );
+        let tokens = tokensObj.map((val) => val.fcmToken);
         const noti = await sendNotification({ title, description, tokens });
         return res.json("To all User Type with specific country");
       } else {
-        const tokens = await Users.find({
-          country: country[0],
-          userType: sendTo[0],
-          isFCM: true,
-        }).map((val) => val.fcmToken);
+        const tokensObj = await Users.find(
+          {
+            country: country[0],
+            userType: sendTo[0],
+            isFCM: "true",
+            fcmToken: { $ne: null, $ne: "", $ne: undefined },
+          },
+          { fcmToken: 1 }
+        );
+        let tokens = tokensObj.map((val) => val.fcmToken);
         const noti = await sendNotification({ title, description, tokens });
         return res.json("To specific user type and Specific country");
       }
