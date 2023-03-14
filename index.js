@@ -10,6 +10,7 @@ const notificationRoutes = require("./routes/notificationRoutes");
 const generalRoutes = require("./routes/generalRoutes");
 //DB
 const DbConnection = require("./db/DbConnection");
+const { pmtObj } = require("./pgs/JazzClient");
 
 DbConnection();
 
@@ -28,7 +29,9 @@ app.use("/api/admins", adminRoutes);
 app.use("/api/sliders", sliderRoutes);
 app.use("/api/notification", notificationRoutes);
 app.use("/api/general", generalRoutes);
-
+app.get("/khan", (req, res) => {
+  return res.json(pmtObj);
+});
 app.get("/", async (req, res) => {
   return res.json({
     msg: "Greetings from MeGo",

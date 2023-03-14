@@ -1,5 +1,5 @@
 const { General } = require("../db/models/General");
-const { admin, storage } = require("../services/firebaseService");
+const { uploadFile, deleteFile } = require("../services/AwsStorage");
 const saveDiameter = async (req, res) => {
   const { id, data } = req.body;
   //   return res.json(req.body);
@@ -35,19 +35,13 @@ const findDiameter = async (req, res) => {
 };
 const testingUpload = async (req, res) => {
   let img = req.files[0];
+
   try {
-    // Upload the image data to Firebase Storage
-    const file = storage.file("images/" + img.fieldname);
-    await file.save(img.buffer, {
-      metadata: {
-        contentType: "image/jpeg",
-      },
-    });
-    console.log("Image successfully uploaded to Firebase Storage.");
-    return res.json("ok");
+    const xx = await uploadFile(img, "abcded");
+    // const xx = await deleteFile("abcded");
+    return res.json(xx);
   } catch (error) {
     console.error("Error uploading image: ", error);
   }
 };
-
 module.exports = { saveDiameter, findDiameter, testingUpload };

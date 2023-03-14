@@ -19,8 +19,15 @@ const saveSlider = async (req, res) => {
     return res.json(slider);
   });
 };
+const deleteSlider = async (req, res) => {
+  console.log(JSON.stringify(req.params));
+  return res.json(req.body);
+  const s = await Sliders.find();
+  return res.json(s);
+};
 const allSliders = async (req, res) => {
   const s = await Sliders.find();
   return res.json(s);
 };
-module.exports = { saveSlider, allSliders };
+
+module.exports = { saveSlider, allSliders, deleteSlider };

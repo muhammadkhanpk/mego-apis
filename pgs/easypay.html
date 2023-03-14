@@ -1,0 +1,30 @@
+<html>
+  <head> </head>
+  <body>
+    <form
+      id="demoFormId"
+      action="https://easypaystg.easypaisa.com.pk/easypay/Index.jsf"
+      method="post"
+      target="_blank"
+    >
+      <input type="hidden" name="paymentMethod" value="OTC_PAYMENT_METHOD" />
+
+      <input name="storeId" value="60645" type="hidden" />
+      <input name="postBackURL" value="http://localhost:5000" type="hidden" />
+      <input name="autoRedirect" value="1" type="hidden" />
+      <input
+        name="orderRefNum"
+        value="Psx-190987"
+        type="hidden"
+        readonly="true"
+      />
+      <input name="amount" value="10.0" type="hidden" readonly="true" />
+      <input
+        value="proceed to checkhout"
+        type="submit"
+        class="button"
+        name="pay"
+      />
+    </form>
+  </body>
+</html>

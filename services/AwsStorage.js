@@ -2,18 +2,19 @@
 const AWS = require("aws-sdk");
 const fs = require("fs");
 const s3 = new AWS.S3({
-  accessKeyId: process.env.accessKeyID,
-  secretAccessKey: process.env.secretAccessKeyID,
+  accessKeyId: "AKIAUOPGLHS7C3YLDKVX",
+  secretAccessKey: "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",
 });
 
-const uploadFile = (filePath, key) => {
+const uploadFile = (file, key) => {
   return new Promise((resolve, reject) => {
     try {
-      const BUCKET = "mego-services";
+      const BUCKET = "megoservices";
       const uploadParams = {
-        Bucket: BUCKET,
+        Bucket: BUCKET + "/helo",
         Key: key,
-        Body: filePath,
+        Body: file.buffer,
+        ContentType: file.mimetype,
       };
 
       s3.upload(uploadParams, function (err, data) {
